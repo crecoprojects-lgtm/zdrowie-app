@@ -24,7 +24,7 @@ export default function BottomNav({ activeTab, onTabChange, isDark = false }: Bo
   ];
 
   return (
-    <nav className={`fixed bottom-0 left-0 right-0 z-50 backdrop-blur-md flex justify-around items-center h-16 shadow-lg transition-colors pb-[env(safe-area-inset-bottom,20px)] pl-[env(safe-area-inset-left,10px)] pr-[env(safe-area-inset-right,10px)] ${
+    <nav className={`fixed bottom-0 left-0 right-0 z-50 backdrop-blur-md flex justify-around items-center h-[calc(4rem+env(safe-area-inset-bottom,15px))] shadow-lg transition-colors pb-[env(safe-area-inset-bottom,15px)] pl-[env(safe-area-inset-left,10px)] pr-[env(safe-area-inset-right,10px)] ${
       isDark 
         ? 'bg-stone-900/95 border-t border-stone-800/80 shadow-black/40' 
         : 'bg-white/95 border-t border-gray-100 shadow-lg shadow-black/5'
