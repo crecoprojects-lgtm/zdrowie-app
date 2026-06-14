@@ -1,0 +1,37 @@
+# Cloudflare Workers Deployment Profile
+# SPDX-License-Identifier: Apache-2.0
+version: 1
+service:
+  name: zdrowie-app
+  environment: production
+  compatibility_date: "2026-06-11"
+
+build:
+  command: "npm run build"
+  directory: "dist"
+  watch_dir: "src"
+
+deployment:
+  provider: github-actions
+  trigger:
+    branch: main
+  secrets:
+    - FIREBASE_API_KEY
+    - CLOUDFLARE_API_TOKEN
+    - CLOUDFLARE_ACCOUNT_ID
+
+pwa:
+  enabled: true
+  name: "Zdrowie PWA Planer"
+  short_name: "Zdrowie"
+  theme_color: "#00478d"
+  background_color: "#f7f9fb"
+  display: "standalone"
+  orientation: "portrait"
+  icons:
+    - src: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=192"
+      sizes: "192x192"
+      type: "image/png"
+    - src: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=512"
+      sizes: "512x512"
+      type: "image/png"

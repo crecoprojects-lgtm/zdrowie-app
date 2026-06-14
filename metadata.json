@@ -1,0 +1,6 @@
+{
+  "name": "Zdrowie",
+  "description": "Mobilna aplikacja do zarządzania planem leczenia, wizytami i organizerem leków, z automatyczną synchronizacją Firestore oraz profilem użytkownika i profilem logowania bez hasła.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

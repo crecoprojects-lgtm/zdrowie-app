@@ -1,0 +1,87 @@
+{
+  "entities": {
+    "Profile": {
+      "title": "Profile",
+      "description": "User profile in the healthcare application for quick login without password",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier of the profile" },
+        "name": { "type": "string", "description": "Name of the user" },
+        "avatarUrl": { "type": "string", "description": "Hotlinked URL or avatar indicator" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp of creation" },
+        "preferences": {
+          "type": "object",
+          "description": "User preferences like sound or notification states"
+        }
+      },
+      "required": ["id", "name", "avatarUrl", "createdAt"]
+    },
+    "Medication": {
+      "title": "Medication",
+      "description": "A scheduled medication for a specific user profile",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier of the medication" },
+        "profileId": { "type": "string", "description": "Reference to the owner profile ID" },
+        "name": { "type": "string", "description": "Name of the medicine" },
+        "frequency": { "type": "string", "enum": ["daily", "custom"], "description": "How often to take the medication" },
+        "days": { "type": "array", "description": "Days of week to take if custom frequency" },
+        "times": { "type": "array", "description": "Specific times of day (rano, poludnie, wieczor) with dose detail" },
+        "durationDays": { "type": "integer", "description": "Active planning duration in days" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp of scheduling" }
+      },
+      "required": ["id", "profileId", "name", "frequency", "times", "durationDays"]
+    },
+    "Dose": {
+      "title": "Dose",
+      "description": "A log of whether a specific medicine dose was taken on a day",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Dose unique identifier" },
+        "profileId": { "type": "string", "description": "Reference to the profile ID" },
+        "medicationId": { "type": "string", "description": "Reference to the medication ID" },
+        "medicationName": { "type": "string", "description": "Name of the medication at logging time" },
+        "timeOfDay": { "type": "string", "enum": ["rano", "poludnie", "wieczor"], "description": "Slot group" },
+        "dosage": { "type": "string", "description": "Amount taken (e.g. 1 tabl)" },
+        "taken": { "type": "boolean", "description": "Whether taken or missed" },
+        "date": { "type": "string", "description": "Date of dose in YYYY-MM-DD form" },
+        "takenAt": { "type": "string", "format": "date-time", "description": "Timestamp of write action" }
+      },
+      "required": ["id", "profileId", "medicationId", "medicationName", "timeOfDay", "taken", "date"]
+    },
+    "Visit": {
+      "title": "Visit",
+      "description": "Medical clinical visits scheduled by the user",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier of the visit" },
+        "profileId": { "type": "string", "description": "Reference to the user profile ID" },
+        "title": { "type": "string", "description": "Reason for doctor visit" },
+        "doctor": { "type": "string", "description": "Name of doctor" },
+        "clinic": { "type": "string", "description": "Medical center or diagnostic lab name" },
+        "date": { "type": "string", "description": "Date in YYYY-MM-DD format" },
+        "time": { "type": "string", "description": "Time in HH:MM format" },
+        "notes": { "type": "string", "description": "Preparation instructions or doctor recommendations" }
+      },
+      "required": ["id", "profileId", "title", "doctor", "clinic", "date", "time"]
+    }
+  },
+  "firestore": {
+    "profiles/{profileId}": {
+      "schema": "Profile",
+      "description": "Collection of passwordless user account profiles"
+    },
+    "profiles/{profileId}/medications/{medicationId}": {
+      "schema": "Medication",
+      "description": "Medication schedules owned by the parent profile"
+    },
+    "profiles/{profileId}/doses/{doseId}": {
+      "schema": "Dose",
+      "description": "Medication ingestion track history logs owned by parent profile"
+    },
+    "profiles/{profileId}/visits/{visitId}": {
+      "schema": "Visit",
+      "description": "Medical visits scheduled by parent profile"
+    }
+  }
+}
