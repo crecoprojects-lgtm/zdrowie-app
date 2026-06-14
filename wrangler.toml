@@ -1,6 +1,0 @@
-name = "zdrowie-app"
-main = "dist/server.cjs"
-compatibility_date = "2026-06-11"
-
-[site]
-bucket = "./dist"
