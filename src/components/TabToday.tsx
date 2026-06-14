@@ -148,7 +148,6 @@ export default function TabToday({ profile, onShowToast, syncTrigger, onDataChan
     loadData();
   }, [profile.id, syncTrigger]);
 
-  // Deep Link: Obsługa zewnętrznych widżetów iOS (Skróty Apple)
   useEffect(() => {
     if (doses.length === 0) return;
     const params = new URLSearchParams(window.location.search);
@@ -164,6 +163,18 @@ export default function TabToday({ profile, onShowToast, syncTrigger, onDataChan
       }, 600);
     }
   }, [doses.length]); // Nasłuchujemy na załadowanie danych z bazy
+
+  // Block body scroll when modal is open
+  useEffect(() => {
+    if (isFormOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isFormOpen]);
 
 
   const parseDosageAmount = (dosageStr: string): number => {
@@ -562,7 +573,7 @@ export default function TabToday({ profile, onShowToast, syncTrigger, onDataChan
       {/* MODAL SHEET FOR ADDING A NEW MEDICATION (Nowy lek) as requested by screenshots 3 & 5 */}
       <AnimatePresence>
         {isFormOpen && (
-          <div className="fixed inset-0 z-50 overflow-hidden flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
+          <div className="fixed inset-0 z-[60] overflow-hidden flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 pb-28">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 0 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}

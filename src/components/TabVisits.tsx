@@ -68,6 +68,18 @@ export default function TabVisits({ profile, onShowToast, syncTrigger }: TabVisi
     loadVisits();
   }, [profile.id, syncTrigger]);
 
+  // Block body scroll when modal is open
+  useEffect(() => {
+    if (isFormOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isFormOpen]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !doctor.trim() || !clinic.trim() || !date || !time) {
@@ -317,7 +329,7 @@ export default function TabVisits({ profile, onShowToast, syncTrigger }: TabVisi
       {/* INLINE POPUP SHEET MODAL FOR SCHEDULE VISIT */}
       <AnimatePresence>
         {isFormOpen && (
-          <div className="fixed inset-0 z-50 overflow-hidden flex items-center justify-center bg-black/45 backdrop-blur-xs p-4">
+          <div className="fixed inset-0 z-[60] overflow-hidden flex items-center justify-center bg-black/45 backdrop-blur-xs p-4 pb-28">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 0 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
