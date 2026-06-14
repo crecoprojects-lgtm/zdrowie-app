@@ -71,28 +71,24 @@ let useLocalStorageFallback = isPlaceholder;
 let dbInstance: any = null;
 let authInstance: any = null;
 
+// Promise, która czeka aż logowanie anonimowe się zakończy
+let authReady: Promise<void> = Promise.resolve();
+
 if (!useLocalStorageFallback) {
   try {
     const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
     dbInstance = getFirestore(app);
     authInstance = getAuth(app);
     
-    // Validate Connection to Firestore following CRITICAL CONSTRAINT
-    const testConnection = async () => {
-      try {
-        // Zaloguj anonimowo, aby przypisać bezpieczne ID urządzenia w regułach Firebase
-        await signInAnonymously(authInstance);
-        await getDocFromServer(doc(dbInstance, 'test', 'connection'));
-        console.log('Firebase Firestore connection tested and authenticated successfully.');
-      } catch (error) {
-        if (error instanceof Error && error.message.includes('client is offline')) {
-          console.warn("Please check your Firebase configuration or internet connection.");
-        } else {
-          console.error("Firebase Auth or Connection Error:", error);
-        }
-      }
-    };
-    testConnection();
+    // Logowanie anonimowe — MUSI się zakończyć przed operacjami na bazie
+    authReady = signInAnonymously(authInstance)
+      .then(() => {
+        console.log('Firebase Auth: zalogowano anonimowo.');
+      })
+      .catch((error) => {
+        console.error('Firebase Auth Error:', error);
+        useLocalStorageFallback = true;
+      });
   } catch (err) {
     console.warn("Firebase failed to initialize. Falling back to persistent simulated local Firestore.", err);
     useLocalStorageFallback = true;
@@ -144,8 +140,15 @@ export const dbService = {
     this.onSyncStatusChange(state);
   },
 
+  // Czeka aż auth się zakończy przed operacją na bazie
+  async ensureAuth() {
+    await authReady;
+  },
+
+
   // ---------------- PROFILES ----------------
   async getProfiles(): Promise<Profile[]> {
+    await this.ensureAuth();
     if (!useLocalStorageFallback) {
       try {
         this.setSyncState('syncing');
@@ -171,6 +174,7 @@ export const dbService = {
   },
 
   async saveProfile(profile: Profile): Promise<void> {
+    await this.ensureAuth();
     if (!useLocalStorageFallback) {
       try {
         this.setSyncState('syncing');
@@ -198,6 +202,7 @@ export const dbService = {
   },
 
   async deleteProfile(profileId: string): Promise<void> {
+    await this.ensureAuth();
     if (!useLocalStorageFallback) {
       try {
         this.setSyncState('syncing');
@@ -238,6 +243,7 @@ export const dbService = {
 
   // ---------------- MEDICATIONS ----------------
   async getMedications(profileId: string): Promise<Medication[]> {
+    await this.ensureAuth();
     if (!useLocalStorageFallback) {
       try {
         this.setSyncState('syncing');
@@ -263,6 +269,7 @@ export const dbService = {
   },
 
   async saveMedication(medication: Medication): Promise<void> {
+    await this.ensureAuth();
     if (!useLocalStorageFallback) {
       try {
         this.setSyncState('syncing');
@@ -290,6 +297,7 @@ export const dbService = {
   },
 
   async deleteMedication(profileId: string, medicationId: string): Promise<void> {
+    await this.ensureAuth();
     if (!useLocalStorageFallback) {
       try {
         this.setSyncState('syncing');
@@ -316,6 +324,7 @@ export const dbService = {
 
   // ---------------- DOSES LOGS ----------------
   async getDoses(profileId: string): Promise<Dose[]> {
+    await this.ensureAuth();
     if (!useLocalStorageFallback) {
       try {
         this.setSyncState('syncing');
@@ -341,6 +350,7 @@ export const dbService = {
   },
 
   async saveDose(dose: Dose): Promise<void> {
+    await this.ensureAuth();
     if (!useLocalStorageFallback) {
       try {
         this.setSyncState('syncing');
@@ -369,6 +379,7 @@ export const dbService = {
 
   // ---------------- VISITS ----------------
   async getVisits(profileId: string): Promise<Visit[]> {
+    await this.ensureAuth();
     if (!useLocalStorageFallback) {
       try {
         this.setSyncState('syncing');
@@ -394,6 +405,7 @@ export const dbService = {
   },
 
   async saveVisit(visit: Visit): Promise<void> {
+    await this.ensureAuth();
     if (!useLocalStorageFallback) {
       try {
         this.setSyncState('syncing');
@@ -421,6 +433,7 @@ export const dbService = {
   },
 
   async deleteVisit(profileId: string, visitId: string): Promise<void> {
+    await this.ensureAuth();
     if (!useLocalStorageFallback) {
       try {
         this.setSyncState('syncing');
@@ -442,6 +455,7 @@ export const dbService = {
 
   // ---------------- NOTIFICATIONS ----------------
   async getNotifications(profileId: string): Promise<AppNotification[]> {
+    await this.ensureAuth();
     if (!useLocalStorageFallback) {
       try {
         this.setSyncState('syncing');
@@ -467,6 +481,7 @@ export const dbService = {
   },
 
   async saveNotification(notification: AppNotification): Promise<void> {
+    await this.ensureAuth();
     if (!useLocalStorageFallback) {
       try {
         this.setSyncState('syncing');
@@ -494,6 +509,7 @@ export const dbService = {
   },
 
   async deleteNotification(profileId: string, notificationId: string): Promise<void> {
+    await this.ensureAuth();
     if (!useLocalStorageFallback) {
       try {
         this.setSyncState('syncing');
