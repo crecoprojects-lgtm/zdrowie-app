@@ -567,7 +567,7 @@ export default function TabToday({ profile, onShowToast, syncTrigger, onDataChan
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
               exit={{ y: '100%', transition: { duration: 0.25 } }}
-              className="w-full max-w-md bg-[#f7f9fb] rounded-t-3xl border-t border-gray-100 shadow-2xl flex flex-col max-h-[92dvh]"
+              className="w-full max-w-md bg-[#f7f9fb] rounded-t-3xl border-t border-gray-100 shadow-2xl flex flex-col h-[85vh]"
             >
               {/* Modal Drag/Indicator Handle */}
               <div className="flex justify-center py-3 shrink-0">
