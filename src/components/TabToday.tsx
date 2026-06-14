@@ -562,29 +562,25 @@ export default function TabToday({ profile, onShowToast, syncTrigger, onDataChan
       {/* MODAL SHEET FOR ADDING A NEW MEDICATION (Nowy lek) as requested by screenshots 3 & 5 */}
       <AnimatePresence>
         {isFormOpen && (
-          <div className="fixed inset-0 z-50 overflow-hidden flex items-end justify-center bg-black/40 backdrop-blur-xs">
+          <div className="fixed inset-0 z-50 overflow-hidden flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
             <motion.div
-              initial={{ y: '100%' }}
-              animate={{ y: 0 }}
-              exit={{ y: '100%', transition: { duration: 0.25 } }}
-              className="w-full max-w-md bg-[#f7f9fb] rounded-t-3xl border-t border-gray-100 shadow-2xl flex flex-col h-[85vh]"
+              initial={{ opacity: 0, scale: 0.95, y: 0 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 0, transition: { duration: 0.2 } }}
+              className="w-full max-w-md bg-[#f7f9fb] rounded-3xl shadow-2xl flex flex-col max-h-[85vh] border border-white/50"
             >
-              {/* Modal Drag/Indicator Handle */}
-              <div className="flex justify-center py-3 shrink-0">
-                <div className="w-12 h-1.5 bg-gray-200 rounded-full" />
-              </div>
-
               {/* Head */}
-              <div className="px-6 pb-2 shrink-0 border-b border-gray-100 flex justify-between items-center">
+              <div className="px-6 pt-6 pb-4 shrink-0 border-b border-gray-100 flex justify-between items-center">
                 <div>
                   <h3 className="text-lg font-bold text-gray-950 font-sans">Zaprojektuj Nowy Lek</h3>
                   <p className="text-xs text-gray-500 mt-0.5">Ustaw pory i dawkę leku by otrzymywać logowania.</p>
                 </div>
                 <button
                   onClick={() => setIsFormOpen(false)}
-                  className="font-semibold text-xs text-gray-400 hover:text-gray-900 border border-gray-200 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+                  className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-900 bg-white border border-gray-200 rounded-full transition-colors cursor-pointer shadow-sm"
+                  aria-label="Zamknij"
                 >
-                  Zamknij
+                  <span className="text-lg font-bold leading-none mb-0.5">&times;</span>
                 </button>
               </div>
 
