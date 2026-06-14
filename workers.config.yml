@@ -29,9 +29,9 @@ pwa:
   display: "standalone"
   orientation: "portrait"
   icons:
-    - src: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=192"
+    - src: "/icon.png"
       sizes: "192x192"
       type: "image/png"
-    - src: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=512"
+    - src: "/icon.png"
       sizes: "512x512"
       type: "image/png"
